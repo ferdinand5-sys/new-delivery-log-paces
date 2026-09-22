@@ -6,291 +6,392 @@
   <title>配達記録ノート</title>
   <style>
     :root {
-      --bg-color: #121212;
-      --card-bg: #1e1e1e;
-      --text-color: #e0e0e0;
-      --accent-color: #4caf50;
-      --border-color: #333333;
+      --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
+      --primary-color: #72b095;
+      --text-color: #333333;
+      --sub-text-color: #666666;
+      --border-radius: 16px;
     }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 12px;
+      padding: 16px;
       box-sizing: border-box;
     }
-    h1, h2, h3 {
-      margin: 0 0 10px 0;
-      font-weight: 600;
-    }
+
     .card {
       background-color: var(--card-bg);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+
+    /* ヘッダーカード */
+    .header-card {
+      background-color: var(--primary-color);
+      color: #ffffff;
+      text-align: center;
+      padding: 20px 16px;
+      border-radius: var(--border-radius);
+      margin-bottom: 16px;
     }
-    .grid-4 {
+    .header-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* 集計カード */
+    .summary-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
+      text-align: center;
     }
-    input[type="number"], input[type="text"], select {
-      background-color: #2a2a2a;
-      border: 1px solid #444;
-      color: #fff;
-      padding: 8px;
-      border-radius: 4px;
+    .summary-item {
+      background: #ffffff;
+      padding: 10px 4px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .summary-label {
+      font-size: 11px;
+      color: var(--sub-text-color);
+      margin-bottom: 4px;
+    }
+    .summary-val {
       font-size: 14px;
-      width: 100%;
-      box-sizing: border-box;
+      font-weight: bold;
     }
-    button {
-      background-color: #333;
-      color: #fff;
-      border: 1px solid #555;
-      padding: 10px;
-      border-radius: 4px;
+    .text-orange { color: #e67e22; }
+
+    /* AI相談ボタン */
+    .btn-ai {
+      width: 100%;
+      background: linear-gradient(135deg, #3a7bd5, #3ab97d);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 25px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      font-size: 14px;
+      box-shadow: 0 4px 10px rgba(58, 123, 213, 0.3);
     }
-    button:active {
-      opacity: 0.8;
-    }
-    .btn-danger {
-      background-color: #f44336;
-      border: none;
-    }
-    .btn-undo {
-      background-color: #ff9800;
-      border: none;
-      width: 100%;
-      margin-top: 8px;
-    }
-    
-    /* 各業者ボタンのスタイリング */
-    .btn-uber { background-color: #06C167; color: #000; border: none; font-weight: bold; }
-    .btn-menu { background-color: #FF0033; color: #fff; border: none; font-weight: bold; }
-    .btn-pickgo { background-color: #00aaff; color: #fff; border: none; font-weight: bold; }
-    .btn-rocket { background-color: #8a2be2; color: #fff; border: none; font-weight: bold; }
 
-    .stat-val {
+    /* 日付表示 */
+    .date-box {
+      background-color: #f0f4f2;
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    /* 入力エリア */
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 12px 8px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 14px;
+      box-sizing: border-box;
+      background-color: #fafafa;
+    }
+
+    /* カウントボタン */
+    .count-selector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    .btn-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .count-display {
       font-size: 18px;
       font-weight: bold;
-      color: #fff;
     }
-    .stat-label {
-      font-size: 11px;
-      color: #aaa;
+
+    /* プラットフォームボタン */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
     }
-    .sub-text {
-      font-size: 12px;
-      color: #888;
+    .btn-platform {
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-uber { background-color: #000000; }
+    .btn-rocket { background-color: #ff5722; }
+    .btn-menu { background-color: #ff0044; }
+    .btn-pickgo { background-color: #00bcd4; } /* 水色そのまま表記をPickGoへ */
+
+    .btn-undo {
+      width: 100%;
+      background-color: #b0bec5;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* ペース計算エリア */
+    .pace-box {
+      background-color: #f9f9f9;
+      border: 1px solid #eef0f2;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .pace-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .pace-result {
+      text-align: center;
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* 履歴 */
+    .log-title {
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 15px;
+      margin-bottom: 8px;
     }
     .log-item {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid #333;
-      padding: 6px 0;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
       font-size: 13px;
     }
-    .log-item:last-child { border-bottom: none; }
   </style>
 </head>
 <body>
 
-  <!-- 本日の目標 & 状況 -->
-  <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-      <h2 style="font-size: 16px;">本日の進捗</h2>
-      <span id="cycle-time" class="sub-text">サイクル: 04:00 ~ 翌03:59</span>
+  <!-- 1番上：固定目標金額11000円・22件（初期状態） -->
+  <div class="header-card">
+    <div id="header-text" class="header-title">あと 11000円 / 22件</div>
+  </div>
+
+  <!-- 集計表示 -->
+  <div class="summary-grid" style="margin-bottom: 16px;">
+    <div class="summary-item">
+      <div class="summary-label">今日</div>
+      <div id="sum-today" class="summary-val">0円</div>
     </div>
-    <div class="grid-4" style="text-align: center;">
-      <div>
-        <div class="stat-label">残目標金額</div>
-        <div id="rem-amount" class="stat-val">11,000円</div>
-      </div>
-      <div>
-        <div class="stat-label">達成金額</div>
-        <div id="curr-amount" class="stat-val">0円</div>
-      </div>
-      <div>
-        <div class="stat-label">配達件数</div>
-        <div id="curr-count" class="stat-val">0 / 22</div>
-      </div>
-      <div>
-        <div class="stat-label">アベレージ</div>
-        <div id="avg-reward" class="stat-val">0円</div>
-      </div>
+    <div class="summary-item">
+      <div class="summary-label">今週</div>
+      <div id="sum-week" class="summary-val">0円</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-label">現金</div>
+      <div id="sum-cash" class="summary-val text-orange">0円</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-label">今月</div>
+      <div id="sum-month" class="summary-val">0円</div>
     </div>
   </div>
 
-  <!-- 配達の入力 -->
-  <div class="card">
-    <h3 style="font-size: 14px;">件数・報酬記録</h3>
-    <div class="grid-2" style="margin-bottom: 8px;">
-      <input type="number" id="input-amount" placeholder="報酬金額 (円)" inputmode="numeric">
-      <input type="number" id="input-count" value="1" placeholder="件数" inputmode="numeric">
-    </div>
-    <div class="grid-4">
-      <button class="btn-uber" onclick="addRecord('Uber Eats')">Uber</button>
-      <button class="btn-menu" onclick="addRecord('menu')">menu</button>
-      <button class="btn-pickgo" onclick="addRecord('PickGo')">PickGo</button>
-      <button class="btn-rocket" onclick="addRecord('Rocket Now')">Rocket</button>
-    </div>
-    <button class="btn-undo" onclick="undoLastRecord()">直前の取り消し</button>
+  <!-- AI分析官ボタン -->
+  <div class="card" style="padding: 8px;">
+    <button class="btn-ai">✨ AI分析官に相談する</button>
   </div>
 
-  <!-- 現在目標ペース計算 (直前の取り消しの下に配置) -->
+  <!-- メイン入力エリア -->
   <div class="card">
-    <h3 style="font-size: 14px;">現在目標ペース計算</h3>
-    <div class="grid-2" style="margin-bottom: 8px;">
-      <div>
-        <span class="stat-label">残目標件数 (個別に測る場合)</span>
-        <input type="number" id="pace-target-count" value="" placeholder="未設定（例: 10）" inputmode="numeric" oninput="calculatePace()">
-      </div>
-      <div>
-        <span class="stat-label">残り時限数 (時間)</span>
-        <input type="number" id="pace-hours" value="" placeholder="未設定（例: 3）" step="0.5" inputmode="decimal" oninput="calculatePace()">
-      </div>
+    <div id="current-date" class="date-box">----/--/--</div>
+
+    <div class="input-grid">
+      <input type="number" id="input-amount" placeholder="報酬" inputmode="numeric">
+      <input type="number" id="input-tip" placeholder="チップ" inputmode="numeric">
+      <input type="number" id="input-cash" placeholder="現金" inputmode="numeric">
     </div>
-    <div style="background-color: #262626; padding: 8px; border-radius: 4px; text-align: center;">
-      <div class="stat-label">必要ペース</div>
-      <div id="pace-result" style="font-size: 16px; font-weight: bold; color: #4caf50;">- 件 / 時間</div>
+
+    <div class="count-selector">
+      <button class="btn-circle" onclick="changeCount(-1)">-</button>
+      <span id="count-val" class="count-display">1件</span>
+      <button class="btn-circle" onclick="changeCount(1)">+</button>
+    </div>
+
+    <div class="platform-grid">
+      <button class="btn-platform btn-uber" onclick="addLog('UberEats')">UberEats</button>
+      <button class="btn-platform btn-rocket" onclick="addLog('RocketNow')">RocketNow</button>
+      <button class="btn-platform btn-menu" onclick="addLog('menu')">menu</button>
+      <button class="btn-platform btn-pickgo" onclick="addLog('PickGo')">PickGo</button>
+    </div>
+
+    <button class="btn-undo" onclick="undoLog()">↩ 直前の取り消し</button>
+
+    <!-- 直前の取り消しのすぐ下に配置した現在目標ペース計算 -->
+    <div class="pace-box">
+      <div style="font-size: 12px; font-weight: bold; margin-bottom: 6px; color: #555;">現在目標ペース計算</div>
+      <div class="pace-grid">
+        <input type="number" id="pace-target" placeholder="残件数" inputmode="numeric" oninput="calcPace()">
+        <input type="number" id="pace-hours" placeholder="残り時間(h)" step="0.5" inputmode="decimal" oninput="calcPace()">
+      </div>
+      <div id="pace-output" class="pace-result">- 件 / 時間</div>
     </div>
   </div>
 
-  <!-- 配達履歴 -->
+  <!-- 履歴表示 -->
   <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-      <h3 style="font-size: 14px; margin: 0;">本日の履歴</h3>
-      <button style="padding: 4px 8px; font-size: 11px;" class="btn-danger" onclick="resetDay()">本日分リセット</button>
-    </div>
-    <div id="log-list" style="max-height: 180px; overflow-y: auto;">
-      <div class="sub-text" style="text-align: center; padding: 10px;">履歴はありません</div>
+    <div id="log-date-title" class="log-title">----/--/-- の内訳</div>
+    <div id="log-list">
+      <div style="text-align: center; color: #999; font-size: 13px; padding: 10px;">履歴はありません</div>
     </div>
   </div>
 
   <script>
-    // 基本設定
     const TARGET_AMOUNT = 11000;
     const TARGET_COUNT = 22;
 
-    let records = JSON.parse(localStorage.getItem('delivery_records') || '[]');
+    let currentCount = 1;
+    let logs = JSON.parse(localStorage.getItem('my_delivery_logs') || '[]');
 
-    function saveData() {
-      localStorage.setItem('delivery_records', JSON.stringify(records));
-      updateUI();
+    // 今日の日付セット
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
+    document.getElementById('current-date').textContent = dateStr;
+    document.getElementById('log-date-title').textContent = `${dateStr} の内訳`;
+
+    function changeCount(val) {
+      currentCount = Math.max(1, currentCount + val);
+      document.getElementById('count-val').textContent = `${currentCount}件`;
     }
 
-    function addRecord(platform) {
-      const amountInput = document.getElementById('input-amount');
-      const countInput = document.getElementById('input-count');
+    function addLog(platform) {
+      const amount = parseInt(document.getElementById('input-amount').value) || 0;
+      const tip = parseInt(document.getElementById('input-tip').value) || 0;
+      const cash = parseInt(document.getElementById('input-cash').value) || 0;
 
-      const amount = parseInt(amountInput.value) || 0;
-      const count = parseInt(countInput.value) || 1;
-
-      if (amount <= 0) {
-        alert('報酬金額を入力してください。');
-        return;
-      }
-
-      const now = new Date();
-      const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-
-      records.unshift({
+      logs.unshift({
         id: Date.now(),
+        date: dateStr,
         platform: platform,
         amount: amount,
-        count: count,
-        time: timeStr
+        tip: tip,
+        cash: cash,
+        count: currentCount
       });
 
-      amountInput.value = '';
-      countInput.value = '1';
+      // 入力クリア
+      document.getElementById('input-amount').value = '';
+      document.getElementById('input-tip').value = '';
+      document.getElementById('input-cash').value = '';
+      currentCount = 1;
+      document.getElementById('count-val').textContent = '1件';
 
       saveData();
     }
 
-    function undoLastRecord() {
-      if (records.length === 0) {
-        alert('取り消す履歴がありません。');
-        return;
-      }
+    function undoLog() {
+      if (logs.length === 0) return;
       if (confirm('直前の記録を取り消しますか？')) {
-        records.shift();
+        logs.shift();
         saveData();
       }
     }
 
-    function resetDay() {
-      if (confirm('本日のすべての記録を消去しますか？')) {
-        records = [];
-        saveData();
-      }
-    }
+    function calcPace() {
+      const target = parseFloat(document.getElementById('pace-target').value);
+      const hours = parseFloat(document.getElementById('pace-hours').value);
+      const out = document.getElementById('pace-output');
 
-    function calculatePace() {
-      const targetCountInput = document.getElementById('pace-target-count').value;
-      const hoursInput = document.getElementById('pace-hours').value;
-      const resultEl = document.getElementById('pace-result');
-
-      const targetCount = parseFloat(targetCountInput);
-      const hours = parseFloat(hoursInput);
-
-      if (!isNaN(targetCount) && !isNaN(hours) && hours > 0) {
-        const pace = (targetCount / hours).toFixed(1);
-        resultEl.textContent = `${pace} 件 / 時間`;
+      if (!isNaN(target) && !isNaN(hours) && hours > 0) {
+        out.textContent = `${(target / hours).toFixed(1)} 件 / 時間`;
       } else {
-        resultEl.textContent = '- 件 / 時間';
+        out.textContent = '- 件 / 時間';
       }
+    }
+
+    function saveData() {
+      localStorage.setItem('my_delivery_logs', JSON.stringify(logs));
+      updateUI();
     }
 
     function updateUI() {
-      let totalAmount = 0;
-      let totalCount = 0;
+      let todayAmount = 0;
+      let todayCount = 0;
+      let todayCash = 0;
 
-      const logList = document.getElementById('log-list');
-      logList.innerHTML = '';
+      const listEl = document.getElementById('log-list');
+      listEl.innerHTML = '';
 
-      if (records.length === 0) {
-        logList.innerHTML = '<div class="sub-text" style="text-align: center; padding: 10px;">履歴はありません</div>';
+      const todayLogs = logs.filter(l => l.date === dateStr);
+
+      if (todayLogs.length === 0) {
+        listEl.innerHTML = '<div style="text-align: center; color: #999; font-size: 13px; padding: 10px;">履歴はありません</div>';
       } else {
-        records.forEach(r => {
-          totalAmount += r.amount;
-          totalCount += r.count;
+        todayLogs.forEach(l => {
+          const total = l.amount + l.tip;
+          todayAmount += total;
+          todayCount += l.count;
+          todayCash += l.cash;
 
           const item = document.createElement('div');
           item.className = 'log-item';
           item.innerHTML = `
-            <span><strong>${r.platform}</strong> (${r.time})</span>
-            <span>${r.count}件 / ${r.amount.toLocaleString()}円</span>
+            <span><strong>${l.platform}</strong> (${l.count}件)</span>
+            <span>${total.toLocaleString()}円 ${l.cash > 0 ? '(現金' + l.cash + '円)' : ''}</span>
           `;
-          logList.appendChild(item);
+          listEl.appendChild(item);
         });
       }
 
-      // 減算金額の計算
-      const remAmount = TARGET_AMOUNT - totalAmount;
+      // 残り計算
+      const remAmount = Math.max(0, TARGET_AMOUNT - todayAmount);
+      const remCount = Math.max(0, TARGET_COUNT - todayCount);
 
-      document.getElementById('rem-amount').textContent = `${remAmount.toLocaleString()}円`;
-      document.getElementById('curr-amount').textContent = `${totalAmount.toLocaleString()}円`;
-      document.getElementById('curr-count').textContent = `${totalCount} / ${TARGET_COUNT}`;
-
-      const avg = totalCount > 0 ? Math.round(totalAmount / totalCount) : 0;
-      document.getElementById('avg-reward').textContent = `${avg.toLocaleString()}円`;
-
-      calculatePace();
+      document.getElementById('header-text').textContent = `あと ${remAmount.toLocaleString()}円 / ${remCount}件`;
+      document.getElementById('sum-today').textContent = `${todayAmount.toLocaleString()}円`;
+      document.getElementById('sum-cash').textContent = `${todayCash.toLocaleString()}円`;
     }
 
-    // 初期化
     updateUI();
   </script>
 </body>
